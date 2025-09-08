@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Play, Settings, Zap } from 'lucide-react';
 import { QuantumGate } from '../types/quantum';
 import { GATE_DEFINITIONS } from '../utils/gates';
+import { InteractiveButton } from './InteractiveButton';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface QuantumControlsProps {
   numQubits: number;
@@ -32,6 +35,7 @@ export const QuantumControls: React.FC<QuantumControlsProps> = ({
   const [c2, setC2] = useState(1);
   const [ccTarget, setCcTarget] = useState(2);
   const [angle, setAngle] = useState(90);
+  const { isDark } = useTheme();
 
   const generateBasisStates = () => {
     const states = [];
@@ -263,21 +267,51 @@ export const QuantumControls: React.FC<QuantumControlsProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 space-y-6">
+    <motion.div 
+      className={`${
+        isDark ? 'bg-gray-800/90' : 'bg-white/90'
+      } backdrop-blur-sm rounded-xl shadow-lg p-6 space-y-6 border ${
+        isDark ? 'border-gray-700' : 'border-gray-200'
+      }`}
+      initial={{ opacity: 0, x: -50 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="flex items-center space-x-2 mb-4">
-        <Settings className="h-6 w-6 text-blue-600" />
-        <h2 className="text-xl font-bold text-gray-900">Quantum Controls</h2>
+        <motion.div
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+        >
+          <Settings className={`h-6 w-6 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
+        </motion.div>
+        <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          Quantum Controls
+        </h2>
       </div>
 
       {/* System Configuration */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 space-y-4">
-        <h3 className="font-semibold text-gray-800">System Configuration</h3>
+      <motion.div 
+        className={`${
+          isDark 
+            ? 'bg-gradient-to-r from-blue-900/30 to-purple-900/30' 
+            : 'bg-gradient-to-r from-blue-50 to-purple-50'
+        } rounded-lg p-4 space-y-4 border ${
+          isDark ? 'border-blue-800/30' : 'border-blue-200/30'
+        }`}
+        whileHover={{ scale: 1.02 }}
+        transition={{ duration: 0.2 }}
+      >
+        <h3 className={`font-semibold ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>
+          System Configuration
+        </h3>
         
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className={`block text-sm font-medium ${
+            isDark ? 'text-gray-300' : 'text-gray-700'
+          } mb-1`}>
             Number of Qubits (1-5)
           </label>
-          <input
+          <motion.input
             type="number"
             min="1"
             max="5"
@@ -289,40 +323,71 @@ export const QuantumControls: React.FC<QuantumControlsProps> = ({
                 setInitialState(0); // Reset initial state
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+              isDark 
+                ? 'bg-gray-700 border-gray-600 text-white' 
+                : 'bg-white border-gray-300 text-gray-900'
+            }`}
+            whileFocus={{ scale: 1.02 }}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className={`block text-sm font-medium ${
+            isDark ? 'text-gray-300' : 'text-gray-700'
+          } mb-1`}>
             Initial Basis State
           </label>
-          <select
+          <motion.select
             value={initialState}
             onChange={(e) => setInitialState(parseInt(e.target.value))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+              isDark 
+                ? 'bg-gray-700 border-gray-600 text-white' 
+                : 'bg-white border-gray-300 text-gray-900'
+            }`}
+            whileFocus={{ scale: 1.02 }}
           >
             {generateBasisStates().map(state => (
               <option key={state.value} value={state.value}>
                 |{state.binary}⟩ = {state.label}
               </option>
             ))}
-          </select>
+          </motion.select>
         </div>
-      </div>
+      </motion.div>
 
       {/* Gate Selection */}
-      <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-lg p-4 space-y-4">
-        <h3 className="font-semibold text-gray-800">Add Quantum Gate</h3>
+      <motion.div 
+        className={`${
+          isDark 
+            ? 'bg-gradient-to-r from-green-900/30 to-teal-900/30' 
+            : 'bg-gradient-to-r from-green-50 to-teal-50'
+        } rounded-lg p-4 space-y-4 border ${
+          isDark ? 'border-green-800/30' : 'border-green-200/30'
+        }`}
+        whileHover={{ scale: 1.02 }}
+        transition={{ duration: 0.2 }}
+      >
+        <h3 className={`font-semibold ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>
+          Add Quantum Gate
+        </h3>
         
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className={`block text-sm font-medium ${
+            isDark ? 'text-gray-300' : 'text-gray-700'
+          } mb-1`}>
             Gate Type
           </label>
-          <select
+          <motion.select
             value={selectedGateType}
             onChange={(e) => setSelectedGateType(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+              isDark 
+                ? 'bg-gray-700 border-gray-600 text-white' 
+                : 'bg-white border-gray-300 text-gray-900'
+            }`}
+            whileFocus={{ scale: 1.02 }}
           >
             <optgroup label="Single-Qubit (Fixed)">
               <option value="X">X (Pauli-X)</option>
@@ -350,34 +415,47 @@ export const QuantumControls: React.FC<QuantumControlsProps> = ({
                 <option value="CCNOT">CCNOT (Toffoli)</option>
               </optgroup>
             )}
-          </select>
+          </motion.select>
         </div>
 
-        <div className="text-sm text-gray-600 bg-white p-3 rounded-lg border">
+        <motion.div 
+          className={`text-sm p-3 rounded-lg border transition-all duration-200 ${
+            isDark 
+              ? 'text-gray-300 bg-gray-700/50 border-gray-600' 
+              : 'text-gray-600 bg-white border-gray-200'
+          }`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          key={selectedGateType}
+        >
           <strong>{GATE_DEFINITIONS[selectedGateType]?.name}:</strong>{' '}
           {GATE_DEFINITIONS[selectedGateType]?.description}
-        </div>
+        </motion.div>
 
         {renderGateInputs()}
 
-        <button
+        <InteractiveButton
           onClick={handleAddGate}
-          className="w-full bg-gradient-to-r from-green-500 to-teal-500 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-teal-600 transition-all duration-200 font-medium flex items-center justify-center space-x-2"
+          variant="success"
+          icon={Zap}
+          className="w-full"
         >
-          <Zap className="h-4 w-4" />
-          <span>Add Gate</span>
-        </button>
-      </div>
+          Add Gate
+        </InteractiveButton>
+      </motion.div>
 
       {/* Run Simulation */}
-      <button
+      <InteractiveButton
         onClick={onRunSimulation}
         disabled={isRunning}
-        className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-200 font-semibold flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        variant="primary"
+        icon={Play}
+        size="lg"
+        loading={isRunning}
+        className="w-full"
       >
-        <Play className="h-5 w-5" />
-        <span>{isRunning ? 'Running Simulation...' : 'Run Quantum Simulation'}</span>
-      </button>
-    </div>
+        {isRunning ? 'Running Simulation...' : 'Run Quantum Simulation'}
+      </InteractiveButton>
+    </motion.div>
   );
 };

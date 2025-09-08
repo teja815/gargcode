@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Atom, Zap, Activity } from 'lucide-react';
 import { useQuantumSimulation } from './hooks/useQuantumSimulation';
 import { QuantumControls } from './components/QuantumControls';
@@ -6,8 +7,11 @@ import { GateList } from './components/GateList';
 import { CircuitDiagram } from './components/CircuitDiagram';
 import { BlochVisualization } from './components/BlochVisualization';
 import { ResultsDisplay } from './components/ResultsDisplay';
+import { ThemeProvider, useTheme } from './contexts/ThemeContext';
+import { ThemeToggle } from './components/ThemeToggle';
+import { AnimatedBackground } from './components/AnimatedBackground';
 
-function App() {
+function AppContent() {
   const {
     numQubits,
     setNumQubits,
@@ -22,31 +26,91 @@ function App() {
     runSimulation,
     isRunning
   } = useQuantumSimulation();
+  
+  const { isDark } = useTheme();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+    <div className="min-h-screen relative overflow-hidden">
+      <AnimatedBackground />
+      
       {/* Header */}
-      <header className="bg-white shadow-lg border-b border-purple-100">
+      <motion.header 
+        className={`${
+          isDark ? 'bg-gray-900/90' : 'bg-white/90'
+        } backdrop-blur-sm shadow-lg border-b ${
+          isDark ? 'border-purple-800/30' : 'border-purple-100'
+        } relative z-10`}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex items-center justify-center space-x-3">
-            <div className="relative">
-              <Atom className="h-10 w-10 text-purple-600" />
-              <Zap className="h-4 w-4 text-blue-500 absolute -top-1 -right-1" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="relative">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                >
+                  <Atom className={`h-10 w-10 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
+                </motion.div>
+                <motion.div
+                  animate={{ 
+                    scale: [1, 1.2, 1],
+                    rotate: [0, 180, 360]
+                  }}
+                  transition={{ 
+                    duration: 2, 
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  <Zap className={`h-4 w-4 absolute -top-1 -right-1 ${
+                    isDark ? 'text-blue-400' : 'text-blue-500'
+                  }`} />
+                </motion.div>
+              </div>
+              <div>
+                <motion.h1 
+                  className={`text-3xl font-bold bg-gradient-to-r ${
+                    isDark 
+                      ? 'from-purple-400 to-blue-400' 
+                      : 'from-purple-600 to-blue-600'
+                  } bg-clip-text text-transparent`}
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
+                  Quantum Bloch Sphere Visualizer
+                </motion.h1>
+                <motion.p 
+                  className={`text-sm mt-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                >
+                  Interactive quantum circuit simulation with real-time visualization
+                </motion.p>
+              </div>
             </div>
-            <div className="text-center">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-                Quantum Bloch Sphere Visualizer
-              </h1>
-              <p className="text-gray-600 text-sm mt-1">
-                Interactive quantum circuit simulation with real-time visualization
-              </p>
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
+              <ThemeToggle />
+            </motion.div>
+          </div>
+        </div>
+      </motion.header>
             </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-4 py-8 relative z-10">
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
           {/* Left Column - Controls and Gate Management */}
           <div className="xl:col-span-1 space-y-6">
@@ -89,11 +153,25 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-16">
+      <motion.footer 
+        className={`${
+          isDark ? 'bg-gray-900/90' : 'bg-white/90'
+        } backdrop-blur-sm border-t ${
+          isDark ? 'border-gray-700' : 'border-gray-200'
+        } mt-16 relative z-10`}
+        initial={{ y: 100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5, delay: 1 }}
+      >
         <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="text-center text-gray-600">
+          <div className={`text-center ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
             <div className="flex items-center justify-center space-x-2 mb-2">
-              <Activity className="h-4 w-4" />
+              <motion.div
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <Activity className="h-4 w-4" />
+              </motion.div>
               <span className="text-sm font-medium">Advanced Quantum Circuit Simulator</span>
             </div>
             <p className="text-xs">
@@ -101,8 +179,16 @@ function App() {
             </p>
           </div>
         </div>
-      </footer>
+      </motion.footer>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
 

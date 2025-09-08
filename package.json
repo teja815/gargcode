@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.7",
+    "framer-motion": "^12.23.12",
     "lucide-react": "^0.542.0",
     "mathjs": "^14.7.0",
     "plotly.js": "^3.1.0",

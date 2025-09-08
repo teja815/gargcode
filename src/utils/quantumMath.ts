@@ -64,8 +64,11 @@ export class QuantumSimulator {
 
     for (let i = 0; i < dim; i++) {
       const bin = i.toString(2).padStart(this.numQubits, '0');
-      const phase = (bin[control] === '1' && bin[target] === '1') ? math.complex(-1, 0) : math.complex(1, 0);
-      newState[i] = math.add(newState[i], math.multiply(phase, this.stateVector[i]));
+      if (bin[control] === '1' && bin[target] === '1') {
+        newState[i] = math.add(newState[i], math.multiply(math.complex(-1, 0), this.stateVector[i]));
+      } else {
+        newState[i] = math.add(newState[i], this.stateVector[i]);
+      }
     }
     this.stateVector = newState;
   }
