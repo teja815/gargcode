@@ -38,9 +38,11 @@ export const CircuitDiagram: React.FC<CircuitDiagramProps> = ({ numQubits, gates
         {gates.map((gate, i) => {
           const x = 100 + i * 120;
           
-          if (['X', 'Y', 'Z', 'H', 'S', 'T', 'Sdg', 'Tdg', 'Rx', 'Ry', 'Rz', 'Phase'].includes(gate.type)) {
+
+          if ([
+            'X', 'Y', 'Z', 'H', 'S', 'T', 'Sdg', 'Tdg', 'Rx', 'Ry', 'Rz', 'Phase'
+          ].includes(gate.type)) {
             const y = 30 + gate.params[0] * 60;
-            
             return (
               <g key={gate.id}>
                 <rect
@@ -68,6 +70,42 @@ export const CircuitDiagram: React.FC<CircuitDiagramProps> = ({ numQubits, gates
                     </tspan>
                   )}
                 </text>
+              </g>
+            );
+          }
+
+          // Render CZ gate
+          if (gate.type === 'CZ') {
+            const [control, target] = gate.params;
+            const yc = 30 + control * 60;
+            const yt = 30 + target * 60;
+            return (
+              <g key={gate.id}>
+                {/* Control dot */}
+                <circle cx={x} cy={yc} r="6" fill="#1E40AF" />
+                {/* Target Z label */}
+                <rect
+                  x={x - 15}
+                  y={yt - 15}
+                  width={30}
+                  height={30}
+                  fill="#FDE68A"
+                  stroke="#CA8A04"
+                  strokeWidth="2"
+                  rx="6"
+                />
+                <text
+                  x={x}
+                  y={yt + 5}
+                  fontSize="14"
+                  textAnchor="middle"
+                  fontWeight="bold"
+                  fill="#CA8A04"
+                >
+                  Z
+                </text>
+                {/* Connection line */}
+                <line x1={x} y1={yc} x2={x} y2={yt} stroke="#CA8A04" strokeWidth="2" />
               </g>
             );
           }

@@ -77,6 +77,18 @@ export const QuantumControls: React.FC<QuantumControlsProps> = ({
             name: gateDefinition.name,
             description: gateDefinition.description
           };
+        } else if (selectedGateType === 'CZ') {
+          if (controlQubit === targetQubit2) {
+            alert('Control and target must be different for CZ gate');
+            return;
+          }
+          gate = {
+            id: '',
+            type: selectedGateType,
+            params: [controlQubit, targetQubit2],
+            name: gateDefinition.name,
+            description: gateDefinition.description
+          };
         } else {
           if (controlQubit === targetQubit2) {
             alert('Control and target must be different');

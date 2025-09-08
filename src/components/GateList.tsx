@@ -1,1 +1,10 @@
-{"code":"rate-limited","message":"You have hit the rate limit. Please upgrade to keep chatting.","providerLimitHit":false,"isRetryable":true}
+import React from 'react';
+
+// TODO: Implement GateList component logic
+export const GateList = (props: any) => {
+	return (
+		<div>
+			{/* Gate list UI goes here */}
+		</div>
+	);
+};

@@ -103,11 +103,7 @@ function AppContent() {
             </motion.div>
           </div>
         </div>
-      </motion.header>
-            </div>
-          </div>
-        </div>
-      </header>
+  </motion.header>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8 relative z-10">
